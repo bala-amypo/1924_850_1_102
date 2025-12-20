@@ -8,11 +8,11 @@ import com.example.demo.entity.AlertLog;
 import com.example.demo.repository.AlertLogRepository;
 
 @Service
-public class AlertService {
+public class AlertLogService {
 
     private final AlertLogRepository repository;
 
-    public AlertService(AlertLogRepository repository) {
+    public AlertLogService(AlertLogRepository repository) {
         this.repository = repository;
     }
 
