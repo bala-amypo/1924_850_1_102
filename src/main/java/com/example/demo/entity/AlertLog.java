@@ -10,4 +10,18 @@ public class AlertLog {
     private Long id;
 
     private String message;
+
+    public AlertLog() {}
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
 }
