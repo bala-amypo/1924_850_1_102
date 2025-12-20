@@ -20,17 +20,17 @@ public class ProductController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Product save(@RequestBody Product product) {
-        return service.save(product);
+    public Product createProduct(@RequestBody Product product) {
+        return service.saveProduct(product);
     }
 
     @GetMapping
-    public List<Product> getAll() {
-        return service.getAll();
+    public List<Product> getAllProducts() {
+        return service.getAllProducts();
     }
 
     @GetMapping("/{id}")
-    public Product getById(@PathVariable Long id) {
-        return service.getById(id);
+    public Product getProductById(@PathVariable Long id) {
+        return service.getProductById(id);
     }
 }

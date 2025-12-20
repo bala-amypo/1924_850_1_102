@@ -6,13 +6,13 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/auth")
 public class AuthController {
 
-    @PostMapping("/login")
-    public String login() {
-        return "Login successful";
-    }
-
     @PostMapping("/register")
     public String register() {
         return "User registered";
+    }
+
+    @PostMapping("/login")
+    public String login() {
+        return "Login successful";
     }
 }

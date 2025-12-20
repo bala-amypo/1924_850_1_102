@@ -20,12 +20,12 @@ public class WarrantyController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Warranty save(@RequestBody Warranty warranty) {
-        return service.save(warranty);
+    public Warranty createWarranty(@RequestBody Warranty warranty) {
+        return service.saveWarranty(warranty);
     }
 
     @GetMapping
-    public List<Warranty> getAll() {
-        return service.getAll();
+    public List<Warranty> getAllWarranties() {
+        return service.getAllWarranties();
     }
 }
