@@ -3,27 +3,28 @@ package com.example.demo.service;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+
 import com.example.demo.entity.Product;
 import com.example.demo.repository.ProductRepository;
 
 @Service
 public class ProductService {
 
-    private final ProductRepository repo;
+    private final ProductRepository repository;
 
-    public ProductService(ProductRepository repo) {
-        this.repo = repo;
+    public ProductService(ProductRepository repository) {
+        this.repository = repository;
     }
 
-    public Product save(Product product) {
-        return repo.save(product);
+    public Product saveProduct(Product product) {
+        return repository.save(product);
     }
 
-    public List<Product> getAll() {
-        return repo.findAll();
+    public List<Product> getAllProducts() {
+        return repository.findAll();
     }
 
-    public Product getById(Long id) {
-        return repo.findById(id).orElse(null);
+    public Product getProductById(Long id) {
+        return repository.findById(id).orElse(null);
     }
 }
