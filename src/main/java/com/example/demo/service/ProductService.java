@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import java.util.List;
+
 import org.springframework.stereotype.Service;
 import com.example.demo.entity.Product;
 import com.example.demo.repository.ProductRepository;
@@ -23,7 +24,6 @@ public class ProductService {
     }
 
     public Product getById(Long id) {
-        return repo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
+        return repo.findById(id).orElse(null);
     }
 }

@@ -1,5 +1,7 @@
 package com.example.demo.util;
 
-public class ModelValidator {
+import org.springframework.stereotype.Component;
 
+@Component
+public class ModelValidator {
 }

@@ -1,37 +1,25 @@
-package com.example.demo.controller;
+package com.example.demo.service;
 
 import java.util.List;
 
-import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Service;
+import com.example.demo.entity.Warranty;
+import com.example.demo.repository.WarrantyRepository;
 
-import com.example.demo.entity.Product;
-import com.example.demo.service.ProductService;
+@Service
+public class WarrantyService {
 
-@RestController
-@RequestMapping("/products")
-public class ProductController {
+    private final WarrantyRepository repo;
 
-    private final ProductService service;
-
-    public ProductController(ProductService service) {
-        this.service = service;
+    public WarrantyService(WarrantyRepository repo) {
+        this.repo = repo;
     }
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Product create(@Valid @RequestBody Product product) {
-        return service.save(product);
+    public Warranty save(Warranty warranty) {
+        return repo.save(warranty);
     }
 
-    @GetMapping
-    public List<Product> getAll() {
-        return service.getAll();
-    }
-
-    @GetMapping("/{id}")
-    public Product getById(@PathVariable Long id) {
-        return service.getById(id);
+    public List<Warranty> getAll() {
+        return repo.findAll();
     }
 }
