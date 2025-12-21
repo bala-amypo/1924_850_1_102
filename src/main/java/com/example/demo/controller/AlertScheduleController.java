@@ -1,31 +1,29 @@
 package com.example.demo.controller;
 
-import java.util.List;
-
-import org.springframework.http.HttpStatus;
+import com.example.demo.entity.AlertSchedule;
+import com.example.demo.service.AlertScheduleService;
 import org.springframework.web.bind.annotation.*;
 
-import com.example.demo.entity.AlertSchedule;
-import com.example.demo.repository.AlertScheduleRepository;
+import java.util.List;
 
 @RestController
-@RequestMapping("/alertschedules")
+@RequestMapping("/schedules")
 public class AlertScheduleController {
 
-    private final AlertScheduleRepository repository;
+    private final AlertScheduleService alertScheduleService;
 
-    public AlertScheduleController(AlertScheduleRepository repository) {
-        this.repository = repository;
+    public AlertScheduleController(AlertScheduleService alertScheduleService) {
+        this.alertScheduleService = alertScheduleService;
     }
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public AlertSchedule createAlertSchedule(@RequestBody AlertSchedule alertSchedule) {
-        return repository.save(alertSchedule);
+    @PostMapping("/{warrantyId}")
+    public AlertSchedule createSchedule(@PathVariable Long warrantyId,
+                                        @RequestBody AlertSchedule schedule) {
+        return alertScheduleService.createSchedule(warrantyId, schedule);
     }
 
-    @GetMapping
-    public List<AlertSchedule> getAllAlertSchedules() {
-        return repository.findAll();
+    @GetMapping("/{warrantyId}")
+    public List<AlertSchedule> getSchedules(@PathVariable Long warrantyId) {
+        return alertScheduleService.getSchedules(warrantyId);
     }
 }
