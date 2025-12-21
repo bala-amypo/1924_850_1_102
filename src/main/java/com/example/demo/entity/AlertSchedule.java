@@ -20,7 +20,9 @@ public class AlertSchedule {
     @JoinColumn(name = "warranty_id", nullable = false)
     private Warranty warranty;
 
+    @Column(nullable = false)
     private Integer daysBeforeExpiry;
 
+    @Column(nullable = false)
     private Boolean enabled;
 }
