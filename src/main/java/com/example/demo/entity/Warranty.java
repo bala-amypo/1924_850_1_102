@@ -1,38 +1,25 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Warranty {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Integer warrantyPeriod;
+    private String productName;
+
+    private String warrantyPeriod;
 
     @ManyToOne
-    private Product product;
-
-    public Warranty() {}
-
-    public Long getId() {
-        return id;
-    }
-
-    public Integer getWarrantyPeriod() {
-        return warrantyPeriod;
-    }
-
-    public void setWarrantyPeriod(Integer warrantyPeriod) {
-        this.warrantyPeriod = warrantyPeriod;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
+    @JoinColumn(name = "user_id")
+    private User user;
 }
