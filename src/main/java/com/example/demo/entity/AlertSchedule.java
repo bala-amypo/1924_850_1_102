@@ -1,27 +1,26 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
+@Table(name = "alert_schedules")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class AlertSchedule {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String scheduleDate;
+    @ManyToOne
+    @JoinColumn(name = "warranty_id", nullable = false)
+    private Warranty warranty;
 
-    public AlertSchedule() {}
+    private Integer daysBeforeExpiry;
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getScheduleDate() {
-        return scheduleDate;
-    }
-
-    public void setScheduleDate(String scheduleDate) {
-        this.scheduleDate = scheduleDate;
-    }
+    private Boolean enabled;
 }
