@@ -13,22 +13,16 @@ public class AuthController {
 
     private final UserService userService;
 
-    // REGISTER
     @PostMapping("/register")
     public User register(@RequestBody User user) {
         return userService.register(user);
     }
-
-    // LOGIN
     @PostMapping("/login")
     public User login(@RequestBody User loginRequest) {
-
         User user = userService.findByEmail(loginRequest.getEmail());
-
         if (!user.getPassword().equals(loginRequest.getPassword())) {
             throw new IllegalArgumentException("Invalid credentials");
         }
-
         return user;
     }
 }
