@@ -1,30 +1,12 @@
 package com.example.demo.service;
 
+import com.example.demo.entity.Product;
+
 import java.util.List;
 
-import org.springframework.stereotype.Service;
+public interface ProductService {
 
-import com.example.demo.entity.Product;
-import com.example.demo.repository.ProductRepository;
+    Product addProduct(Product product);
 
-@Service
-public class ProductService {
-
-    private final ProductRepository repository;
-
-    public ProductService(ProductRepository repository) {
-        this.repository = repository;
-    }
-
-    public Product saveProduct(Product product) {
-        return repository.save(product);
-    }
-
-    public List<Product> getAllProducts() {
-        return repository.findAll();
-    }
-
-    public Product getProductById(Long id) {
-        return repository.findById(id).orElse(null);
-    }
+    List<Product> getAllProducts();
 }

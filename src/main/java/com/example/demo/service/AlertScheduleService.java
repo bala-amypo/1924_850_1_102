@@ -1,26 +1,12 @@
 package com.example.demo.service;
 
+import com.example.demo.entity.AlertSchedule;
+
 import java.util.List;
 
-import org.springframework.stereotype.Service;
+public interface AlertScheduleService {
 
-import com.example.demo.entity.AlertSchedule;
-import com.example.demo.repository.AlertScheduleRepository;
+    AlertSchedule createSchedule(Long warrantyId, AlertSchedule schedule);
 
-@Service
-public class AlertScheduleService {
-
-    private final AlertScheduleRepository repository;
-
-    public AlertScheduleService(AlertScheduleRepository repository) {
-        this.repository = repository;
-    }
-
-    public AlertSchedule saveAlertSchedule(AlertSchedule alertSchedule) {
-        return repository.save(alertSchedule);
-    }
-
-    public List<AlertSchedule> getAllAlertSchedules() {
-        return repository.findAll();
-    }
+    List<AlertSchedule> getSchedules(Long warrantyId);
 }
