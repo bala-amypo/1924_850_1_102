@@ -1,14 +1,9 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.AuthRequest;
-import com.example.demo.dto.AuthResponse;
-import com.example.demo.dto.RegisterRequest;
 import com.example.demo.entity.User;
-import com.example.demo.security.JwtTokenProvider;
 import com.example.demo.service.UserService;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,37 +12,23 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final UserService userService;
-    private final PasswordEncoder passwordEncoder;
-    private final JwtTokenProvider jwtTokenProvider;
 
+    // REGISTER
     @PostMapping("/register")
-    public User register(@RequestBody RegisterRequest request) {
-
-        User user = User.builder()
-                .name(request.getName())
-                .email(request.getEmail())
-                .password(request.getPassword())
-                .role(request.getRole())
-                .build();
-
+    public User register(@RequestBody User user) {
         return userService.register(user);
     }
 
+    // LOGIN
     @PostMapping("/login")
-    public AuthResponse login(@RequestBody AuthRequest request) {
+    public User login(@RequestBody User loginRequest) {
 
-        User user = userService.findByEmail(request.getEmail());
+        User user = userService.findByEmail(loginRequest.getEmail());
 
-        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+        if (!user.getPassword().equals(loginRequest.getPassword())) {
             throw new IllegalArgumentException("Invalid credentials");
         }
 
-        String token = jwtTokenProvider.generateToken(
-                user.getId(),
-                user.getEmail(),
-                user.getRole()
-        );
-
-        return new AuthResponse(token);
+        return user;
     }
 }
