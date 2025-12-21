@@ -22,9 +22,11 @@ public class AlertLog {
     @JoinColumn(name = "warranty_id", nullable = false)
     private Warranty warranty;
 
-    private LocalDateTime sentAt;
-
+    @Column(nullable = false)
     private String message;
+
+    @Column(nullable = false)
+    private LocalDateTime sentAt;
 
     @PrePersist
     public void onCreate() {
