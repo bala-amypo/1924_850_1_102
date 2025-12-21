@@ -27,11 +27,13 @@ public class Warranty {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
+    @Column(nullable = false)
     private LocalDate purchaseDate;
 
+    @Column(nullable = false)
     private LocalDate expiryDate;
 
-    @Column(unique = true)
+    @Column(nullable = false, unique = true)
     private String serialNumber;
 
     @OneToMany(mappedBy = "warranty", cascade = CascadeType.ALL)
