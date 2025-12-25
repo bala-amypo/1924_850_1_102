@@ -11,7 +11,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class AlertLog {
-    @Id @GeneratedValue
+
+    @Id
+    @GeneratedValue
     private Long id;
 
     private String message;

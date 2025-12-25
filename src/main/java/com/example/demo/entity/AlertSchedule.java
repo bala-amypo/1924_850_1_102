@@ -9,7 +9,9 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class AlertSchedule {
-    @Id @GeneratedValue
+
+    @Id
+    @GeneratedValue
     private Long id;
 
     private Integer daysBeforeExpiry;

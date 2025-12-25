@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Entity
 @Data
@@ -12,7 +11,9 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class Warranty {
-    @Id @GeneratedValue
+
+    @Id
+    @GeneratedValue
     private Long id;
 
     private LocalDate purchaseDate;
