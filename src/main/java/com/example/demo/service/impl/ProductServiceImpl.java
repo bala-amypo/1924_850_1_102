@@ -1,8 +1,10 @@
-package com.example.demo.service;
+package com.example.demo.service.impl;
 
 import com.example.demo.entity.Product;
 import com.example.demo.repository.ProductRepository;
+import com.example.demo.service.ProductService;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -17,15 +19,12 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product addProduct(Product product) {
-
-        if (product.getModelNumber() == null || product.getModelNumber().isBlank()) {
+        if (!StringUtils.hasText(product.getModelNumber())) {
             throw new IllegalArgumentException("Model number required");
         }
-
-        if (product.getCategory() == null || product.getCategory().isBlank()) {
+        if (!StringUtils.hasText(product.getCategory())) {
             throw new IllegalArgumentException("Category required");
         }
-
         return productRepository.save(product);
     }
 
