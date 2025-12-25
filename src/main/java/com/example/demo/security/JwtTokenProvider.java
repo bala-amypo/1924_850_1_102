@@ -20,7 +20,6 @@ public class JwtTokenProvider {
         this.jwtProperties = jwtProperties;
     }
 
-    // Method signature matches the Test Suite and AuthController usage
     public String createToken(Long userId, String email, String role) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + jwtProperties.getExpirationMs());

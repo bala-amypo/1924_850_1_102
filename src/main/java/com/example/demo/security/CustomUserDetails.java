@@ -10,58 +10,38 @@ import java.util.Collections;
 
 public class CustomUserDetails implements UserDetails {
 
-    private final Long id;
-    private final String email;
-    private final String password;
-    private final String role;
+    private final User user;
 
     public CustomUserDetails(User user) {
-        this.id = user.getId();
-        this.email = user.getEmail();
-        this.password = user.getPassword();
-        this.role = user.getRole();
-    }
-
-    public Long getId() {
-        return id;
+        this.user = user;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // ROLE_ prefix is important for Spring Security
-        return Collections.singletonList(
-                new SimpleGrantedAuthority("ROLE_" + role)
-        );
+        return Collections.singleton(new SimpleGrantedAuthority("ROLE_" + user.getRole()));
     }
 
     @Override
     public String getPassword() {
-        return password;
+        return user.getPassword();
     }
 
     @Override
     public String getUsername() {
-        // Username is email
-        return email;
+        return user.getEmail();
     }
 
     @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
+    public boolean isAccountNonExpired() { return true; }
 
     @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
+    public boolean isAccountNonLocked() { return true; }
 
     @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
+    public boolean isCredentialsNonExpired() { return true; }
 
     @Override
-    public boolean isEnabled() {
-        return true;
-    }
+    public boolean isEnabled() { return true; }
+    
+    public User getUser() { return user; }
 }
