@@ -7,38 +7,21 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-@Table(name = "warranties")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class Warranty {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue
     private Long id;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "product_id")
-    private Product product;
-
-    @Column(nullable = false)
     private LocalDate purchaseDate;
-
-    @Column(nullable = false)
     private LocalDate expiryDate;
-
-    @Column(nullable = false, unique = true)
     private String serialNumber;
 
-    @OneToMany(mappedBy = "warranty", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<AlertSchedule> alertSchedules;
+    @ManyToOne
+    private User user;
 
-    @OneToMany(mappedBy = "warranty", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<AlertLog> alertLogs;
+    @ManyToOne
+    private Product product;
 }
