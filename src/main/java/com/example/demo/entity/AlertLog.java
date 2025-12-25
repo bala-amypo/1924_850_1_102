@@ -2,7 +2,6 @@ package com.example.demo.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.time.LocalDateTime;
 
@@ -19,19 +18,18 @@ public class AlertLog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "warranty_id", nullable = false)
-    @JsonIgnore
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "warranty_id")
     private Warranty warranty;
+
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime sentAt;
 
     @Column(nullable = false)
     private String message;
 
-    @Column(nullable = false)
-    private LocalDateTime sentAt;
-
     @PrePersist
-    public void onCreate() {
+    protected void onCreate() {
         this.sentAt = LocalDateTime.now();
     }
 }

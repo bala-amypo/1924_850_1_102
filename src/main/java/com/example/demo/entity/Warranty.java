@@ -2,8 +2,6 @@ package com.example.demo.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 
 import java.time.LocalDate;
 import java.util.List;
@@ -21,14 +19,12 @@ public class Warranty {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    @JsonIgnore
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id", nullable = false)
-    @JsonIgnore
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "product_id")
     private Product product;
 
     @Column(nullable = false)
@@ -40,9 +36,9 @@ public class Warranty {
     @Column(nullable = false, unique = true)
     private String serialNumber;
 
-    @OneToMany(mappedBy = "warranty", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "warranty", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AlertSchedule> alertSchedules;
 
-    @OneToMany(mappedBy = "warranty", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "warranty", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AlertLog> alertLogs;
 }

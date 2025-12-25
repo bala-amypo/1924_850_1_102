@@ -2,8 +2,6 @@ package com.example.demo.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 
 @Entity
 @Table(name = "alert_schedules")
@@ -18,9 +16,8 @@ public class AlertSchedule {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "warranty_id", nullable = false)
-    @JsonIgnore
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "warranty_id")
     private Warranty warranty;
 
     @Column(nullable = false)

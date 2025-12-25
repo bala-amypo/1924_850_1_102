@@ -29,6 +29,6 @@ public class Product {
     @Column(nullable = false)
     private String category;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Warranty> warranties;
 }
