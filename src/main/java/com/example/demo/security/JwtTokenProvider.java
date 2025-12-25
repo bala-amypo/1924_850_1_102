@@ -3,10 +3,12 @@ package com.example.demo.security;
 import com.example.demo.config.JwtProperties;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Date;
 
+@Component   // ✅ ADD THIS
 public class JwtTokenProvider {
 
     private final JwtProperties props;
@@ -29,7 +31,7 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    // ✅ REQUIRED FOR AuthController
+    // 🔁 for controller compatibility
     public String generateToken(Long userId, String email, String role) {
         return createToken(userId, email, role);
     }
