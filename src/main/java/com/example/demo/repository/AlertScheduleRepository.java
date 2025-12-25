@@ -1,9 +1,11 @@
 package com.example.demo.repository;
 
-import com.example.demo.entity.AlertSchedule;
-import java.util.List;
+import com.example.demo.entity.AlertLog;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface AlertScheduleRepository {
-    AlertSchedule save(AlertSchedule schedule);
+import java.util.List;
+@Repository
+public interface AlertScheduleRepository extends JpaRepository<AlertSchedule, Long> {
     List<AlertSchedule> findByWarrantyId(Long warrantyId);
 }
