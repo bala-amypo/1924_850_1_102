@@ -1,52 +1,55 @@
 package com.example.demo.security;
 
 import com.example.demo.config.JwtProperties;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
 
-import java.security.Key;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
-@Component   // ✅ ADD THIS
+@Component
 public class JwtTokenProvider {
 
-    private final JwtProperties props;
+    private final JwtProperties jwtProperties;
 
-    public JwtTokenProvider(JwtProperties props) {
-        this.props = props;
-    }
-
-    private Key getKey() {
-        return Keys.hmacShaKeyFor(props.getSecret().getBytes());
+    public JwtTokenProvider(JwtProperties jwtProperties) {
+        this.jwtProperties = jwtProperties;
     }
 
     public String createToken(Long userId, String email, String role) {
+        Date now = new Date();
+        Date expiryDate = new Date(now.getTime() + jwtProperties.getExpirationMs());
+
         return Jwts.builder()
+                .setSubject(email)
                 .claim("userId", userId)
-                .claim("email", email)
                 .claim("role", role)
-                .setExpiration(new Date(System.currentTimeMillis() + props.getExpirationMs()))
-                .signWith(getKey(), SignatureAlgorithm.HS256)
+                .claim("email", email)
+                .setIssuedAt(now)
+                .setExpiration(expiryDate)
+                .signWith(Keys.hmacShaKeyFor(jwtProperties.getSecret().getBytes(StandardCharsets.UTF_8)), SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    // 🔁 for controller compatibility
-    public String generateToken(Long userId, String email, String role) {
-        return createToken(userId, email, role);
-    }
-
     public boolean validateToken(String token) {
-        Jwts.parserBuilder()
-                .setSigningKey(getKey())
+        try {
+            Jwts.parserBuilder()
+                .setSigningKey(Keys.hmacShaKeyFor(jwtProperties.getSecret().getBytes(StandardCharsets.UTF_8)))
                 .build()
                 .parseClaimsJws(token);
-        return true;
+            return true;
+        } catch (Exception ex) {
+            return false;
+        }
     }
 
     public Jws<Claims> getClaims(String token) {
         return Jwts.parserBuilder()
-                .setSigningKey(getKey())
+                .setSigningKey(Keys.hmacShaKeyFor(jwtProperties.getSecret().getBytes(StandardCharsets.UTF_8)))
                 .build()
                 .parseClaimsJws(token);
     }
