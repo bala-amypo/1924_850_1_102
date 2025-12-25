@@ -1,10 +1,8 @@
 package com.example.demo.repository;
 
 import com.example.demo.entity.Warranty;
-import org.springframework.data.jpa.repository.JpaRepository;
-
 import java.time.LocalDate;
-import java.util.List;
+import java.util.*;
 
 public interface WarrantyRepository {
     Warranty save(Warranty warranty);
