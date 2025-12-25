@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 @Component
@@ -18,8 +19,9 @@ public class ModelValidator {
     @Value("${jwt.expiration-ms}")
     private long expirationMs;
 
-    private SecretKey getSigningKey() {
-        return Keys.hmacShaKeyFor(secret.getBytes());
+    private SecretKey getKey() {
+        // ✅ UTF-8 + correct size
+        return Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
 
     public String generateToken(String username) {
@@ -30,7 +32,7 @@ public class ModelValidator {
                 .setExpiration(
                         new Date(System.currentTimeMillis() + expirationMs)
                 )
-                .signWith(getSigningKey(), SignatureAlgorithm.HS512)
+                .signWith(getKey(), SignatureAlgorithm.HS512)
                 .compact();
     }
 }
