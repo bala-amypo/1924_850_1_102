@@ -17,18 +17,14 @@ public class AlertLogController {
         this.alertLogService = alertLogService;
     }
 
-    @PostMapping("/{warrantyId}")
-    public ResponseEntity<AlertLog> addLog(@PathVariable Long warrantyId,
+    @PostMapping
+    public ResponseEntity<AlertLog> addLog(@RequestParam Long warrantyId, 
                                            @RequestBody String message) {
-        return ResponseEntity.ok(
-                alertLogService.addLog(warrantyId, message)
-        );
+        return ResponseEntity.ok(alertLogService.addLog(warrantyId, message));
     }
 
-    @GetMapping("/{warrantyId}")
-    public ResponseEntity<List<AlertLog>> getLogs(@PathVariable Long warrantyId) {
-        return ResponseEntity.ok(
-                alertLogService.getLogs(warrantyId)
-        );
+    @GetMapping
+    public ResponseEntity<List<AlertLog>> getLogs(@RequestParam Long warrantyId) {
+        return ResponseEntity.ok(alertLogService.getLogs(warrantyId));
     }
 }

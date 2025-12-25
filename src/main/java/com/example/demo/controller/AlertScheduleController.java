@@ -17,18 +17,14 @@ public class AlertScheduleController {
         this.alertScheduleService = alertScheduleService;
     }
 
-    @PostMapping("/{warrantyId}")
-    public ResponseEntity<AlertSchedule> createSchedule(@PathVariable Long warrantyId,
+    @PostMapping
+    public ResponseEntity<AlertSchedule> createSchedule(@RequestParam Long warrantyId,
                                                         @RequestBody AlertSchedule schedule) {
-        return ResponseEntity.ok(
-                alertScheduleService.createSchedule(warrantyId, schedule)
-        );
+        return ResponseEntity.ok(alertScheduleService.createSchedule(warrantyId, schedule));
     }
 
-    @GetMapping("/{warrantyId}")
-    public ResponseEntity<List<AlertSchedule>> getSchedules(@PathVariable Long warrantyId) {
-        return ResponseEntity.ok(
-                alertScheduleService.getSchedules(warrantyId)
-        );
+    @GetMapping
+    public ResponseEntity<List<AlertSchedule>> getSchedules(@RequestParam Long warrantyId) {
+        return ResponseEntity.ok(alertScheduleService.getSchedules(warrantyId));
     }
 }
