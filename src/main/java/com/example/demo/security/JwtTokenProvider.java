@@ -29,12 +29,23 @@ public class JwtTokenProvider {
                 .compact();
     }
 
+    // ✅ REQUIRED FOR AuthController
+    public String generateToken(Long userId, String email, String role) {
+        return createToken(userId, email, role);
+    }
+
     public boolean validateToken(String token) {
-        Jwts.parserBuilder().setSigningKey(getKey()).build().parseClaimsJws(token);
+        Jwts.parserBuilder()
+                .setSigningKey(getKey())
+                .build()
+                .parseClaimsJws(token);
         return true;
     }
 
     public Jws<Claims> getClaims(String token) {
-        return Jwts.parserBuilder().setSigningKey(getKey()).build().parseClaimsJws(token);
+        return Jwts.parserBuilder()
+                .setSigningKey(getKey())
+                .build()
+                .parseClaimsJws(token);
     }
 }
