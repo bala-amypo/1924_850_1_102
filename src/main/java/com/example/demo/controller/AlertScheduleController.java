@@ -2,31 +2,33 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.AlertSchedule;
 import com.example.demo.service.AlertScheduleService;
-
-import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/schedules")
-@RequiredArgsConstructor
 public class AlertScheduleController {
 
     private final AlertScheduleService alertScheduleService;
 
-    // CREATE SCHEDULE
-    @PostMapping("/{warrantyId}")
-    public AlertSchedule createSchedule(
-            @PathVariable Long warrantyId,
-            @RequestBody AlertSchedule schedule
-    ) {
-        return alertScheduleService.createSchedule(warrantyId, schedule);
+    public AlertScheduleController(AlertScheduleService alertScheduleService) {
+        this.alertScheduleService = alertScheduleService;
     }
 
-    // GET SCHEDULES FOR WARRANTY
+    @PostMapping("/{warrantyId}")
+    public ResponseEntity<AlertSchedule> createSchedule(@PathVariable Long warrantyId,
+                                                        @RequestBody AlertSchedule schedule) {
+        return ResponseEntity.ok(
+                alertScheduleService.createSchedule(warrantyId, schedule)
+        );
+    }
+
     @GetMapping("/{warrantyId}")
-    public List<AlertSchedule> getSchedules(@PathVariable Long warrantyId) {
-        return alertScheduleService.getSchedules(warrantyId);
+    public ResponseEntity<List<AlertSchedule>> getSchedules(@PathVariable Long warrantyId) {
+        return ResponseEntity.ok(
+                alertScheduleService.getSchedules(warrantyId)
+        );
     }
 }

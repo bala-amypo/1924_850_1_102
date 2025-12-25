@@ -2,31 +2,33 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.AlertLog;
 import com.example.demo.service.AlertLogService;
-
-import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/logs")
-@RequiredArgsConstructor
 public class AlertLogController {
 
     private final AlertLogService alertLogService;
 
-    // CREATE LOG ENTRY
-    @PostMapping("/{warrantyId}")
-    public AlertLog addLog(
-            @PathVariable Long warrantyId,
-            @RequestBody String message
-    ) {
-        return alertLogService.addLog(warrantyId, message);
+    public AlertLogController(AlertLogService alertLogService) {
+        this.alertLogService = alertLogService;
     }
 
-    // GET LOGS FOR WARRANTY
+    @PostMapping("/{warrantyId}")
+    public ResponseEntity<AlertLog> addLog(@PathVariable Long warrantyId,
+                                           @RequestBody String message) {
+        return ResponseEntity.ok(
+                alertLogService.addLog(warrantyId, message)
+        );
+    }
+
     @GetMapping("/{warrantyId}")
-    public List<AlertLog> getLogs(@PathVariable Long warrantyId) {
-        return alertLogService.getLogs(warrantyId);
+    public ResponseEntity<List<AlertLog>> getLogs(@PathVariable Long warrantyId) {
+        return ResponseEntity.ok(
+                alertLogService.getLogs(warrantyId)
+        );
     }
 }
