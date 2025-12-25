@@ -7,6 +7,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface AlertLogRepository extends JpaRepository<AlertLog, Long> {
+public interface AlertLogRepository
+        extends JpaRepository<AlertLog, Long> {
+
     List<AlertLog> findByWarrantyId(Long warrantyId);
 }
