@@ -5,7 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface AlertScheduleRepository extends JpaRepository<AlertSchedule, Long> {
-
+public interface AlertScheduleRepository {
+    AlertSchedule save(AlertSchedule s);
     List<AlertSchedule> findByWarrantyId(Long warrantyId);
 }
+

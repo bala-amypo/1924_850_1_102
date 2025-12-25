@@ -6,12 +6,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.time.LocalDate;
 import java.util.List;
 
-public interface WarrantyRepository extends JpaRepository<Warranty, Long> {
-
-    boolean existsBySerialNumber(String serialNumber);
-
+public interface WarrantyRepository {
+    Warranty save(Warranty warranty);
+    Optional<Warranty> findById(Long id);
+    boolean existsBySerialNumber(String serial);
     List<Warranty> findByUserId(Long userId);
-
-    List<Warranty> findByExpiryDateBetween(LocalDate start, LocalDate end);
-
+    List<Warranty> findWarrantiesExpiringBetween(LocalDate from, LocalDate to);
 }

@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface AlertLogRepository extends JpaRepository<AlertLog, Long> {
-
+public interface AlertLogRepository {
+    AlertLog save(AlertLog log);
     List<AlertLog> findByWarrantyId(Long warrantyId);
 }
