@@ -19,7 +19,7 @@ public class SwaggerConfig {
         return new OpenAPI()
                 // ✅ Server configuration
                 .servers(List.of(
-                        new Server().url("https://9225.408procr.amypo.ai")
+                        new Server().url("https://9225.408procr.amypo.ai/")
                 ))
 
                 // ✅ Add JWT Security Requirement (THIS CREATES 🔐 AUTHORIZE BUTTON)
