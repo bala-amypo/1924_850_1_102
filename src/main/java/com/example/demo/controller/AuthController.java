@@ -37,8 +37,6 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
         User user = userService.findByEmail(request.getEmail());
-        
-        // Match the method name 'createToken' used in JwtTokenProvider
         String token = jwtTokenProvider.createToken(user.getId(), user.getEmail(), user.getRole());
 
         AuthResponse response = AuthResponse.builder()
