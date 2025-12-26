@@ -20,7 +20,6 @@ public class ModelValidator {
     private long expirationMs;
 
     private SecretKey getKey() {
-        // ✅ UTF-8 + correct size
         return Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
 
