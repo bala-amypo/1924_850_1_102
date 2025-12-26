@@ -17,17 +17,12 @@ public class SwaggerConfig {
     public OpenAPI customOpenAPI() {
 
         return new OpenAPI()
-                // ✅ Server configuration
                 .servers(List.of(
                         new Server().url("https://9225.408procr.amypo.ai/")
                 ))
-
-                // ✅ Add JWT Security Requirement (THIS CREATES 🔐 AUTHORIZE BUTTON)
                 .addSecurityItem(
                         new SecurityRequirement().addList("bearerAuth")
                 )
-
-                // ✅ Define JWT Security Scheme
                 .components(
                         new Components().addSecuritySchemes(
                                 "bearerAuth",

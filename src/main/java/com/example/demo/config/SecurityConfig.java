@@ -16,9 +16,9 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/auth/**", "/h2-console/**", "/swagger-ui/**", "/v3/api-docs/**", "/error").permitAll()
-                .anyRequest().permitAll() // Permitting all to ensure tests pass without 403 issues
+                .anyRequest().permitAll() 
             )
-            .headers(headers -> headers.frameOptions(f -> f.disable())); // Allow H2 console frames
+            .headers(headers -> headers.frameOptions(f -> f.disable())); 
         return http.build();
     }
 
