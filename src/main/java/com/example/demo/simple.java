@@ -855,3 +855,25 @@ public interface AlertScheduleService {
 
 ProductService:
 
+package com.example.demo.service;
+
+import com.example.demo.entity.Product;
+import java.util.List;
+
+public interface ProductService {
+    Product addProduct(Product product);
+    List<Product> getAllProducts();
+}
+
+UserService:
+
+package com.example.demo.service;
+
+import com.example.demo.entity.User;
+
+public interface UserService {
+    User register(User user);
+    User findByEmail(String email);
+}
+
+WarrantyService:
