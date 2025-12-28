@@ -1,6 +1,6 @@
 package com.example.demo.entity;
 
-jakarta.validation.constraints.Email
+import jakarta.validation.constraints.Email;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -16,6 +16,7 @@ public class User {
     private Long id;
     
     private String name;
+    @Email(message = "Please provide a valid email address")
     private String email;
     private String password;
     private String role;
