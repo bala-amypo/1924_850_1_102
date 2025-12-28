@@ -877,3 +877,316 @@ public interface UserService {
 }
 
 WarrantyService:
+package com.example.demo.service;
+
+import com.example.demo.entity.Warranty;
+import java.util.List;
+
+public interface WarrantyService {
+    Warranty registerWarranty(Long userId, Long productId, Warranty warranty);
+    List<Warranty> getUserWarranties(Long userId);
+    Warranty getWarranty(Long warrantyId);
+}
+
+IMPL:
+AlertLogServiceImpl;
+
+package com.example.demo.service.impl;
+
+import com.example.demo.entity.AlertLog;
+import com.example.demo.entity.Warranty;
+import com.example.demo.exception.ResourceNotFoundException;
+import com.example.demo.repository.AlertLogRepository;
+import com.example.demo.repository.WarrantyRepository;
+import com.example.demo.service.AlertLogService;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class AlertLogServiceImpl implements AlertLogService {
+
+    private final AlertLogRepository logRepository;
+    private final WarrantyRepository warrantyRepository;
+
+    public AlertLogServiceImpl(AlertLogRepository logRepository, 
+                               WarrantyRepository warrantyRepository) {
+        this.logRepository = logRepository;
+        this.warrantyRepository = warrantyRepository;
+    }
+
+    @Override
+    public AlertLog addLog(Long warrantyId, String message) {
+        Warranty warranty = warrantyRepository.findById(warrantyId)
+                .orElseThrow(() -> new ResourceNotFoundException("Warranty not found"));
+
+        AlertLog log = AlertLog.builder()
+                .warranty(warranty)
+                .message(message)
+                .build();
+        
+        // Entity @PrePersist handles timestamp
+        return logRepository.save(log);
+    }
+
+    @Override
+    public List<AlertLog> getLogs(Long warrantyId) {
+        if (warrantyRepository.findById(warrantyId).isEmpty()) {
+            throw new ResourceNotFoundException("Warranty not found");
+        }
+        return logRepository.findByWarrantyId(warrantyId);
+    }
+}
+
+AlertScheduleServiceImpl:
+
+package com.example.demo.service.impl;
+
+import com.example.demo.entity.AlertSchedule;
+import com.example.demo.entity.Warranty;
+import com.example.demo.exception.ResourceNotFoundException;
+import com.example.demo.repository.AlertScheduleRepository;
+import com.example.demo.repository.WarrantyRepository;
+import com.example.demo.service.AlertScheduleService;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class AlertScheduleServiceImpl implements AlertScheduleService {
+
+    private final AlertScheduleRepository scheduleRepository;
+    private final WarrantyRepository warrantyRepository;
+
+    public AlertScheduleServiceImpl(AlertScheduleRepository scheduleRepository, 
+                                    WarrantyRepository warrantyRepository) {
+        this.scheduleRepository = scheduleRepository;
+        this.warrantyRepository = warrantyRepository;
+    }
+
+    @Override
+    public AlertSchedule createSchedule(Long warrantyId, AlertSchedule schedule) {
+        Warranty warranty = warrantyRepository.findById(warrantyId)
+                .orElseThrow(() -> new ResourceNotFoundException("Warranty not found"));
+
+        if (schedule.getDaysBeforeExpiry() < 0) {
+            throw new IllegalArgumentException("daysBeforeExpiry must be >= 0");
+        }
+
+        schedule.setWarranty(warranty);
+        return scheduleRepository.save(schedule);
+    }
+
+    @Override
+    public List<AlertSchedule> getSchedules(Long warrantyId) {
+        if (warrantyRepository.findById(warrantyId).isEmpty()) {
+             throw new ResourceNotFoundException("Warranty not found");
+        }
+        return scheduleRepository.findByWarrantyId(warrantyId);
+    }
+}
+
+ProductServiceImpl:
+
+package com.example.demo.service.impl;
+
+import com.example.demo.entity.Product;
+import com.example.demo.repository.ProductRepository;
+import com.example.demo.service.ProductService;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+
+import java.util.List;
+
+@Service
+public class ProductServiceImpl implements ProductService {
+
+    private final ProductRepository productRepository;
+
+    public ProductServiceImpl(ProductRepository productRepository) {
+        this.productRepository = productRepository;
+    }
+
+    @Override
+    public Product addProduct(Product product) {
+        if (!StringUtils.hasText(product.getModelNumber())) {
+            throw new IllegalArgumentException("Model number required");
+        }
+        if (!StringUtils.hasText(product.getCategory())) {
+            throw new IllegalArgumentException("Category required");
+        }
+        return productRepository.save(product);
+    }
+
+    @Override
+    public List<Product> getAllProducts() {
+        return productRepository.findAll();
+    }
+}
+
+UserServiceImpl:
+
+package com.example.demo.service.impl;
+
+import com.example.demo.entity.User;
+import com.example.demo.exception.ResourceNotFoundException;
+import com.example.demo.repository.UserRepository;
+import com.example.demo.service.UserService;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+
+@Service
+public class UserServiceImpl implements UserService {
+
+    private final UserRepository userRepository;
+
+    public UserServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    @Override
+    public User register(User user) {
+        if (userRepository.existsByEmail(user.getEmail())) {
+            throw new IllegalArgumentException("Email already exists");
+        }
+        user.setPassword("hashed_" + user.getPassword());
+        
+        if (!StringUtils.hasText(user.getRole())) {
+            user.setRole("USER");
+        }
+        
+        return userRepository.save(user);
+    }
+
+    @Override
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+    }
+}
+
+WarrantyServiceImpl:
+
+package com.example.demo.service.impl;
+
+import com.example.demo.entity.Product;
+import com.example.demo.entity.User;
+import com.example.demo.entity.Warranty;
+import com.example.demo.exception.ResourceNotFoundException;
+import com.example.demo.repository.ProductRepository;
+import com.example.demo.repository.UserRepository;
+import com.example.demo.repository.WarrantyRepository;
+import com.example.demo.service.WarrantyService;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class WarrantyServiceImpl implements WarrantyService {
+
+    private final WarrantyRepository warrantyRepository;
+    private final UserRepository userRepository;
+    private final ProductRepository productRepository;
+
+    public WarrantyServiceImpl(WarrantyRepository warrantyRepository, 
+                               UserRepository userRepository, 
+                               ProductRepository productRepository) {
+        this.warrantyRepository = warrantyRepository;
+        this.userRepository = userRepository;
+        this.productRepository = productRepository;
+    }
+
+    @Override
+    public Warranty registerWarranty(Long userId, Long productId, Warranty warranty) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
+
+        if (!warranty.getExpiryDate().isAfter(warranty.getPurchaseDate())) {
+            throw new IllegalArgumentException("Expiry date must be after purchase date");
+        }
+
+        if (warrantyRepository.existsBySerialNumber(warranty.getSerialNumber())) {
+            throw new IllegalArgumentException("Serial number must be unique");
+        }
+
+        warranty.setUser(user);
+        warranty.setProduct(product);
+        return warrantyRepository.save(warranty);
+    }
+
+    @Override
+    public List<Warranty> getUserWarranties(Long userId) {
+        return warrantyRepository.findByUserId(userId);
+    }
+
+    @Override
+    public Warranty getWarranty(Long warrantyId) {
+        return warrantyRepository.findById(warrantyId)
+                .orElseThrow(() -> new ResourceNotFoundException("Warranty not found"));
+    }
+}
+
+UTIL:
+
+ModelValidator:
+
+package com.example.digitalwarrantytracker.util;
+
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
+import java.util.Date;
+
+@Component
+public class ModelValidator {
+
+    @Value("${jwt.secret}")
+    private String secret;
+
+    @Value("${jwt.expiration-ms}")
+    private long expirationMs;
+
+    private SecretKey getKey() {
+        return Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+    }
+
+    public String generateToken(String username) {
+
+        return Jwts.builder()
+                .setSubject(username)
+                .setIssuedAt(new Date())
+                .setExpiration(
+                        new Date(System.currentTimeMillis() + expirationMs)
+                )
+                .signWith(getKey(), SignatureAlgorithm.HS512)
+                .compact();
+    }
+}
+
+
+Application properties:
+
+spring.application.name=demo
+# Don't change the port
+server.port = 9001
+# for https
+server.forward-headers-strategy=framework 
+
+spring.datasource.url=jdbc:mysql://localhost:3306/transport?createDatabaseIfNotExist=true
+spring.datasource.username=root
+spring.datasource.password=Amypo
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
+
+# JWT CONFIG
+jwt.secret=MySuperSecretKeyForJwtGeneration123456MySuperSecretKeyForJwtGeneration123456MySuperSecretKeyForJwtGeneration123456
+jwt.expiration-ms=86400000
