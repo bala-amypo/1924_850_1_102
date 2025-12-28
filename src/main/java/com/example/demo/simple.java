@@ -294,3 +294,184 @@ public class AuthRequest {
     private String email;
     private String password;
 }
+
+AuthResponse:
+
+package com.example.demo.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class AuthResponse {
+    private String token;
+    private Long userId;
+    private String email;
+    private String role;
+}
+
+RegisterRequest:
+
+package com.example.demo.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class RegisterRequest {
+    private String name;
+    private String email;
+    private String password;
+    private String role;
+}
+
+ENTITY:
+AlertLog:
+
+package com.example.demo.entity;
+
+import jakarta.persistence.*;
+import lombok.*;
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name = "alert_logs")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class AlertLog {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    private String message;
+    private LocalDateTime sentAt;
+
+    @ManyToOne
+    @JoinColumn(name = "warranty_id")
+    private Warranty warranty;
+
+    @PrePersist
+    public void prePersist() {
+        this.sentAt = LocalDateTime.now();
+    }
+}
+
+AlertSchedule:
+
+package com.example.demo.entity;
+
+import jakarta.persistence.*;
+import lombok.*;
+
+@Entity
+@Table(name = "alert_schedules")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class AlertSchedule {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    private Integer daysBeforeExpiry;
+    private Boolean enabled;
+
+    @ManyToOne
+    @JoinColumn(name = "warranty_id")
+    private Warranty warranty;
+}
+
+Product:
+
+package com.example.demo.entity;
+
+import jakarta.persistence.*;
+import lombok.*;
+
+@Entity
+@Table(name = "products")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class Product {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    private String name;
+    private String brand;
+    private String modelNumber;
+    private String category;
+}
+
+User:
+
+package com.example.demo.entity;
+
+import jakarta.persistence.*;
+import lombok.*;
+
+@Entity
+@Table(name = "users")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    private String name;
+    private String email;
+    private String password;
+    private String role;
+}
+
+Warranty:
+
+package com.example.demo.entity;
+
+import jakarta.persistence.*;
+import lombok.*;
+import java.time.LocalDate;
+
+@Entity
+@Table(name = "warranties")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class Warranty {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    private LocalDate purchaseDate;
+    private LocalDate expiryDate;
+    private String serialNumber;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
+}
+
+EXCEPTION:
