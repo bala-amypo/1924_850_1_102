@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+jakarta.validation.constraints.Email
 import jakarta.persistence.*;
 import lombok.*;
 
